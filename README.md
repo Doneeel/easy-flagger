@@ -2,17 +2,19 @@
 Simple flag processing for Python
 
 ### Supported types:
-    
-- [x] int
-- [x] float
-- [x] str
-- [x] bool
-- [x] list
+
+| type | implemented |
+|------|-------------|
+| int  | True        |
+| float| True        |
+| str  | True        |
+| bool | True        |
+| list | True        |
 
 ## Installation
 
 ```bash
-pip install simple-flagger
+$ pip install easy-flagger
 ```
 
 ## Simple usage example
@@ -37,4 +39,16 @@ if __name__ == "__main__":
     l_flag = flag.parse_flag("-l", list, sep=",")
 
     print(l_flag) # >> ['1', '2', '3']
+```
+
+## Checks flag for existence example
+```python
+# python example.py --flag
+from flagger import Flagger
+
+if __name__ == "__main__":
+    flag = Flagger()
+    l_flag = flag.parse_flag("--flag")
+
+    print(l_flag) # >> True
 ```

@@ -114,7 +114,7 @@ class Flagger:
     def _check_function_existence(self, function: str) -> bool:
         return function in Flagger.__dict__
 
-    def parse_flag(self, tag: str, f_type: type, **kwargs):
+    def parse_flag(self, tag: str, f_type: type = None, **kwargs):
         """Entrypoint for parsing a flag
 
         Args:
@@ -127,6 +127,12 @@ class Flagger:
         Returns:
             _type_: _description_
         """
+        if f_type is None:
+            try:
+                return self._find_idx(tag) > 0
+            except TagNotFoundError:
+                return False
+
         type_name = f_type.__name__
         parsing_function = f"_parse_{type_name}"
 
