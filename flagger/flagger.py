@@ -29,7 +29,7 @@ class Flagger:
     def __init__(self, args: list = sys.argv):
         self.args = args
 
-    def _find_idx(self, tag: str) -> int:
+    def __find_idx__(self, tag: str) -> int:
         """Returns -1 if tag was not found
 
         Args:
@@ -45,7 +45,7 @@ class Flagger:
 
         return tag_idx
 
-    def _find_value(self, tag: str):
+    def __find_value__(self, tag: str):
         """Finding value in args by tag
 
         Args:
@@ -57,7 +57,7 @@ class Flagger:
         Returns:
             _type_: any_type
         """
-        idx = self._find_idx(tag)
+        idx = self.__find_idx__(tag)
 
         try:
             base_value = self.args[idx + 1]
@@ -66,7 +66,7 @@ class Flagger:
 
         return base_value
 
-    def _find_and_process_single_value(self, tag: str, f_type: type):
+    def __find_and_process_single_value__(self, tag: str, f_type: type):
         """Single value processing
 
         Args:
@@ -79,7 +79,7 @@ class Flagger:
         Returns:
             _type_: _description_
         """
-        base_value = self._find_value(tag)
+        base_value = self.__find_value__(tag)
 
         try:
             value = f_type(base_value)
@@ -88,7 +88,7 @@ class Flagger:
 
         return value
 
-    def _find_and_process_multi_value(self, tag: str, f_type: type, sep: str):
+    def __find_and_process_multi_value__(self, tag: str, f_type: type, sep: str):
         """Processing a multiple value items, like `list`
 
         Args:
@@ -102,7 +102,7 @@ class Flagger:
         Returns:
             _type_: _description_
         """
-        base_value = self._find_value(tag)
+        base_value = self.__find_value__(tag)
 
         try:
             value = f_type(base_value.split(sep))
@@ -111,8 +111,8 @@ class Flagger:
 
         return value
 
-    def _check_function_existence(self, function: str) -> bool:
-        return function in Flagger.__dict__
+    def __check_function_existence__(self, function: str) -> bool:
+        return function in dir(Flagger)
 
     def parse_flag(self, tag: str, f_type: type = None, **kwargs):
         """Entrypoint for parsing a flag
@@ -129,14 +129,14 @@ class Flagger:
         """
         if f_type is None:
             try:
-                return self._find_idx(tag) > 0
+                return self.__find_idx__(tag) > 0
             except TagNotFoundError:
                 return False
 
         type_name = f_type.__name__
-        parsing_function = f"_parse_{type_name}"
+        parsing_function = f"__parse_{type_name}__"
 
-        if self._check_function_existence(function=parsing_function):
+        if self.__check_function_existence__(function=parsing_function):
             function_args = f"'{tag}'"
             if "sep" in kwargs:
                 separator = kwargs.get("sep")
@@ -147,17 +147,17 @@ class Flagger:
 
         raise TypeNotFoundError(tag, f_type)
 
-    def _parse_int(self, tag: str) -> int:
-        return self._find_and_process_single_value(tag, int)
+    def __parse_int__(self, tag: str) -> int:
+        return self.__find_and_process_single_value__(tag, int)
 
-    def _parse_str(self, tag: str) -> str:
-        return self._find_and_process_single_value(tag, str)
+    def __parse_str__(self, tag: str) -> str:
+        return self.__find_and_process_single_value__(tag, str)
 
-    def _parse_float(self, tag: str) -> float:
-        return self._find_and_process_single_value(tag, float)
+    def __parse_float__(self, tag: str) -> float:
+        return self.__find_and_process_single_value__(tag, float)
 
-    def _parse_bool(self, tag: str) -> bool:
-        return self._find_and_process_single_value(tag, bool)
+    def __parse_bool__(self, tag: str) -> bool:
+        return self.__find_and_process_single_value__(tag, bool)
 
-    def _parse_list(self, tag: str, sep: str = ",") -> list:
-        return self._find_and_process_multi_value(tag, list, sep)
+    def __parse_list__(self, tag: str, sep: str = ",") -> list:
+        return self.__find_and_process_multi_value__(tag, list, sep)
