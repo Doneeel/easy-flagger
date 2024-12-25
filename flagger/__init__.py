@@ -4,6 +4,7 @@ from .exceptions import (
     TypeMismatchError,
     TypeNotFoundError,
     OutOfBoundsArgs,
+    InTestsError,
 )
 
 __all__ = [Flagger, TagNotFoundError, TypeMismatchError, TypeNotFoundError, OutOfBoundsArgs]

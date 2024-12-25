@@ -128,10 +128,7 @@ class Flagger:
             _type_: _description_
         """
         if f_type is None:
-            try:
-                return self.__find_idx__(tag) > 0
-            except TagNotFoundError:
-                return False
+            return self.__find_idx__(tag) > 0
 
         type_name = f_type.__name__
         parsing_function = f"__parse_{type_name}__"
