@@ -12,13 +12,34 @@ from flagger.exceptions import (
 
 
 class BasicTypeTesting(unittest.TestCase):
-    args: list = ["test.py", '-f', '10.3', '-i', '20', '-b', 'True', '-s', 'String', '-l', '1,2,3',
-                '--flt', '10.3', '--int', '20', '--bool', 'True', '--string', 'String', '--list', '1.2.3']
+    args: list = [
+        "test.py",
+        "-f",
+        "10.3",
+        "-i",
+        "20",
+        "-b",
+        "True",
+        "-s",
+        "String",
+        "-l",
+        "1,2,3",
+        "--flt",
+        "10.3",
+        "--int",
+        "20",
+        "--bool",
+        "True",
+        "--string",
+        "String",
+        "--list",
+        "1.2.3",
+    ]
     flagger: Flagger = Flagger(args=args)
 
-    def __init__(self, methodName = "runTest"):
+    def __init__(self, methodName="runTest"):
         super().__init__(methodName)
-        
+
         self.parse_flag = self.flagger.parse_flag
 
     def test_short_int(self):
@@ -49,18 +70,38 @@ class BasicTypeTesting(unittest.TestCase):
         self.assertIsInstance(self.parse_flag("--bool", bool), bool)
 
     def test_long_list(self):
-        self.assertIsInstance(self.parse_flag(
-            "--list", list, sep="."), list)
+        self.assertIsInstance(self.parse_flag("--list", list, sep="."), list)
 
 
 class BasicValueTesting(unittest.TestCase):
-    args: list = ["test.py", '-f', '10.3', '-i', '20', '-b', 'True', '-s', 'String', '-l', '1,2,3',
-                '--flt', '10.3', '--int', '20', '--bool', 'True', '--string', 'String', '--list', '1.2.3']
+    args: list = [
+        "test.py",
+        "-f",
+        "10.3",
+        "-i",
+        "20",
+        "-b",
+        "True",
+        "-s",
+        "String",
+        "-l",
+        "1,2,3",
+        "--flt",
+        "10.3",
+        "--int",
+        "20",
+        "--bool",
+        "True",
+        "--string",
+        "String",
+        "--list",
+        "1.2.3",
+    ]
     flagger: Flagger = Flagger(args=args)
 
-    def __init__(self, methodName = "runTest"):
+    def __init__(self, methodName="runTest"):
         super().__init__(methodName)
-        
+
         self.parse_flag = self.flagger.parse_flag
 
     def test_short_int(self):
@@ -76,7 +117,7 @@ class BasicValueTesting(unittest.TestCase):
         self.assertEqual(self.parse_flag("-b", bool), True)
 
     def test_short_list(self):
-        self.assertEqual(self.parse_flag("-l", list), ['1', '2', '3'])
+        self.assertEqual(self.parse_flag("-l", list), ["1", "2", "3"])
 
     def test_long_int(self):
         self.assertEqual(self.parse_flag("--int", int), 20)
@@ -91,17 +132,18 @@ class BasicValueTesting(unittest.TestCase):
         self.assertEqual(self.parse_flag("--bool", bool), True)
 
     def test_long_list(self):
-        self.assertEqual(self.flagger.parse_flag(
-            "--list", list, sep="."), ['1', '2', '3'])
+        self.assertEqual(
+            self.flagger.parse_flag("--list", list, sep="."), ["1", "2", "3"]
+        )
 
 
 class ExistenceChecking(unittest.TestCase):
-    args: list = ["test.py", '-f', '-long-flag']
+    args: list = ["test.py", "-f", "-long-flag"]
     flagger: Flagger = Flagger(args=args)
 
-    def __init__(self, methodName = "runTest"):
+    def __init__(self, methodName="runTest"):
         super().__init__(methodName)
-        
+
         self.parse_flag = self.flagger.parse_flag
 
     def test_flag_in_args(self):
@@ -111,14 +153,17 @@ class ExistenceChecking(unittest.TestCase):
         self.assertEqual(self.parse_flag("-long-flag"), True)
 
 
+class wrong_type:
+    __name__ = "wrong"
+
+
 class ExceptionTesting(unittest.TestCase):
-    args: list = ["test.py", '-f', '10.3', '-i', 'Text', 
-                '--int', '20', '--out']
+    args: list = ["test.py", "-f", "10.3", "-i", "Text", "--int", "20", "--out"]
     flagger: Flagger = Flagger(args=args)
 
-    def __init__(self, methodName = "runTest"):
+    def __init__(self, methodName="runTest"):
         super().__init__(methodName)
-        
+
         self.parse_flag = self.flagger.parse_flag
 
     def test_tag_not_found_error(self):
@@ -127,18 +172,18 @@ class ExceptionTesting(unittest.TestCase):
         except TagNotFoundError:
             pass
         else:
-            raise InTestsError("tag_not_found_error") 
-    
+            raise InTestsError("tag_not_found_error")
+
     def test_type_not_found_error(self):
-        type wrong = int
-        
+        wrong = wrong_type()
+
         try:
             self.assertEqual(self.parse_flag("--int", wrong), 20)
         except TypeNotFoundError:
             pass
         else:
             raise InTestsError("type_not_found_error")
-    
+
     def test_type_mismatch_error(self):
         try:
             self.assertEqual(self.parse_flag("-i", int), 10)
@@ -146,7 +191,7 @@ class ExceptionTesting(unittest.TestCase):
             pass
         else:
             raise InTestsError("type_mismatch_error")
-    
+
     def test_out_of_bounds_args(self):
         try:
             self.assertEqual(self.parse_flag("--out", str), "test")
