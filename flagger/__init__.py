@@ -4,6 +4,16 @@ from .exceptions import (
     TypeMismatchError,
     TypeNotFoundError,
     OutOfBoundsArgs,
+    InTestsError,
 )
+from .type_parsers import TypeParsers
 
-__all__ = [Flagger, TagNotFoundError, TypeMismatchError, TypeNotFoundError, OutOfBoundsArgs]
+__all__ = [
+    Flagger,
+    TagNotFoundError,
+    TypeMismatchError,
+    TypeNotFoundError,
+    OutOfBoundsArgs,
+    InTestsError,
+    TypeParsers,
+]

@@ -21,3 +21,8 @@ class OutOfBoundsArgs(BaseException):
         super().__init__(
             f"Value for tag {tag} with type {f_type.__name__} was not found", *args
         )
+
+
+class InTestsError(BaseException):
+    def __init__(self, test_case: str, *args):
+        super().__init__(f"Exception in {test_case} didn't work properly", *args)
