@@ -7,6 +7,7 @@ from flagger.exceptions import (
 )
 from flagger.type_parsers import TypeParsers
 
+
 class Flagger:
     """Simple class for parsing flags
 
@@ -25,14 +26,17 @@ class Flagger:
     """
 
     args: list
-    types : TypeParsers
-    
+    types: TypeParsers
+
     def __init__(self, args: list = sys.argv):
         self.args = args
         self.types = TypeParsers()
 
     def __find_idx__(self, tag: str) -> int:
-        """Returns -1 if tag was not found
+        """
+        Finding position of the tag
+
+        Raises error if tag index was not found
 
         Args:
             tag (str): tag name, like -f, --file, etc.
@@ -69,7 +73,7 @@ class Flagger:
         return base_value
 
     def __find_and_process_value__(self, tag: str, f_type: type, **kwargs):
-        """Processing a multiple value items, like `list`
+        """Processing value
 
         Args:
             tag (str): flag tag
@@ -80,11 +84,11 @@ class Flagger:
             TypeMismatchError
 
         Returns:
-            _type_: _description_
+            _type_
         """
         base_value = self.__find_value__(tag)
         processor = self.types.types.get(f_type).processor
-        
+
         try:
             value = processor(base_value, **kwargs)
         except ValueError:

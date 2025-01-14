@@ -8,4 +8,12 @@ from .exceptions import (
 )
 from .type_parsers import TypeParsers
 
-__all__ = [Flagger, TagNotFoundError, TypeMismatchError, TypeNotFoundError, OutOfBoundsArgs, InTestsError, TypeParsers]
+__all__ = [
+    Flagger,
+    TagNotFoundError,
+    TypeMismatchError,
+    TypeNotFoundError,
+    OutOfBoundsArgs,
+    InTestsError,
+    TypeParsers,
+]

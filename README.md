@@ -3,13 +3,14 @@ Simple flag processing for Python
 
 ### Supported types:
 
-| type | implemented |
-|------|-------------|
-| int  | True        |
-| float| True        |
-| str  | True        |
-| bool | True        |
-| list | True        |
+| type   | implemented |
+|--------|-------------|
+| int    | True        |
+| float  | True        |
+| str    | True        |
+| bool   | True        |
+| list   | True        |
+| custom | True        |
 
 ## Installation
 
@@ -51,4 +52,34 @@ if __name__ == "__main__":
     l_flag = flag.parse_flag("--flag")
 
     print(l_flag) # >> True
+```
+
+## Using custom types flags
+```python
+# python example.py -e Aerendyl
+from flagger import Flagger
+
+class Elven:
+    allowed = {
+        "aerendyl": 1,
+        "erendriel": 2,
+        "galadriel": 3
+    }
+    
+    @staticmethod
+    def check(value: str):
+        value = value.lower()
+        is_allowed = value in Elven.allowed
+        if not is_allowed:
+            raise ValueError("the language is that of Mordor, which I will not utter here")
+        
+        return Elven.allowed.get(value) 
+
+if __name__ == "__main__":
+    flag = Flagger()
+    flagger.types.add_parser(Elven, Elven.check)
+    
+    elf = flagger.parse_flag("-e", Elven)
+    
+    print(elf) # >> Aerendyl
 ```
